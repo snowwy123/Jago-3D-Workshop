@@ -19,3 +19,14 @@ Native host uses the existing JAGO WebView2 runtime payload, with its accompanyi
 ## Expansion 0.2
 
 Manifold 3.5.4 (Apache-2.0), including its bundled WASM, is now used for local physical-output preparation in an on-demand worker. fflate 0.8.3 (MIT) supplies 3MF/frame ZIP packaging. See their accompanying notices. Core work remains offline. The worker is created only when preparing solids and is terminated after completion/cancellation. No Cables, TouchDesigner, Fluid or ASCII implementation is included.
+
+
+## Authoring/finishes pass 0.3 · 22 October 2026
+
+Official Three.js references checked for cel gradient maps, nearest-filtered non-colour gradient data, HDR bloom and output colour management:
+- https://threejs.org/docs/pages/MeshToonMaterial.html
+- https://threejs.org/docs/pages/UnrealBloomPass
+- https://threejs.org/manual/pages/post-processing.html
+- Bundled Three r186 source: ShaderChunk/map_fragment.glsl.js, RenderPass, OutputPass and UnrealBloomPass.
+
+Solid operations checked against the bundled Manifold 3.5.4 declarations and official API reference: https://manifoldcad.org/docs/jsuser/classes/Manifold.html . New controls, authoring recipes, texture/pulse shaders, camera interpolation and workflow code were authored for this Workshop. Dependencies retain their existing notices. No remote presets, private reference media or new runtime services were bundled.
