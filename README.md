@@ -1,4 +1,4 @@
-# Jago 3D Workshop · experimental 0.3.1
+# Jago 3D Workshop · experimental 0.4.0
 
 An offline workshop for dimensional artwork, sculptural forms, small creative sets and physical-output experiments. Working title; separate from the public suite. Pulse is unchanged.
 
@@ -6,7 +6,7 @@ An offline workshop for dimensional artwork, sculptural forms, small creative se
 
 Open **Jago-3D-Workshop.exe**, or the accompanying self-contained **Jago-3D-Workshop.html** in a recent WebGL2 desktop browser. Windows app: x64 Windows, .NET Framework and Microsoft Edge WebView2 Runtime. Keep the extracted files together.
 
-Try **Neon workshop sign** for travelling neon, flowing pattern stripes and a spinning emblem. Paper landscape, Dimensional lettering, Quiet studio vessels and Orbital line sculpture remain editable starts.
+Try **Illustrated dimensional sign**, **Printable maker tag** or **Looping neon sign** for a grouped design, a flat single-shell print study, or travelling neon and moving patterns. Paper landscape, Dimensional lettering, Quiet studio vessels and Orbital line sculpture remain editable starts.
 
 ## Make
 
@@ -23,6 +23,24 @@ Click selects; Ctrl-click adds/removes; Shift-click selects a range in the objec
 Enable **Snap** in the canvas toolbar or temporarily hold Shift while using a handle. **Snap settings** exposes grid spacing, angular increments, edge/centre attraction and surface attraction. Alignment buttons use the active object's bounds as reference. Rest on surface uses actual bounds, including rotation. The working surface has its own height and colour; Add a solid platform creates an actual editable/exportable object.
 
 Depth study explores an assembled illustration without scattering its X/Y layout. Gallery, grid, radial, stack and scatter modes deliberately reposition separate objects. Generate from seed repeats the current exploration basis; Surprise arrangement chooses a fresh seed. Compare 3 directions previews alternatives before Apply. Editing the set establishes a new basis. Locks stay authoritative.
+
+## Select, duplicate and focus
+
+**Q · Select** switches left-drag to rectangle selection; the normal Move/Rotate/Scale tools retain orbit navigation. Rectangle selection touches visible objects’ projected bounds, including objects behind another visible piece. It is not an occlusion-aware pixel selection. Shift adds to the selection; Ctrl chooses individual group members. Right-drag remains available for panning. Use W/E/R to leave Select mode.
+
+The selection outline encloses the selected visible set. **Frame selection** frames it. **Isolate selection** temporarily hides the rest while you work; the on-canvas **Show all** button restores it. This changes only the editor view. PNG/JPG, GLB, print and projection output use the document’s normal visibility. Isolation resets when opening a project or example and does not change saved visibility.
+
+Hold **Alt while starting a Move-handle drag** to drag a duplicate; the originals remain visible and stay in place. One Undo removes the duplicate. Ctrl+D remains available. Combined results bring independent copies of their source objects, and group/source identifiers are remapped so copies do not edit the originals. Source dependencies count toward the existing 64-object / 240-instance limits.
+
+## My creations
+
+Select an object or group, open **My creations…**, name it and **Save to my creations**. The shelf stores your pieces, embedded artwork, materials, construction and motion across projects on this device. Combined-shape sources are included automatically. A small preview is generated when saving. Search, rename, export or remove entries from the shelf. Removing a shelf entry leaves the current scene and exported files intact.
+
+**Add to scene** inserts an independent editable copy, either centred on the working surface or beside the current selection. **Unlock inserted pieces** is optional. One Undo removes the insertion. Motion uses the current scene’s clip length. The shelf does not replace the scene’s lighting, background or camera.
+
+**Export selected as file** / a saved card’s **Export** writes a self-contained `.jagocreation`. **Import creation…** brings that file into the shelf, ready to add to any scene. Export these files for backup, another browser or another PC; the local shelf is not your portable backup. Imported thumbnails are omitted rather than rendering untrusted embedded previews; objects and artwork are still included.
+
+The shelf runs only when used and stores data locally through IndexedDB. Limits are 40 creations / 50 MB total, with a 24 MB creation-file limit. If local storage is unavailable/full, export the selection as a file instead. Missing construction sources are reported before saving or duplicating. Geometry/asset limits still apply on insertion.
 
 ## Editable construction and combined solids
 
@@ -77,10 +95,11 @@ Save project downloads a portable .jago3d containing artwork, construction, mate
 
 | Key | Action |
 |---|---|
+| Q | Toggle rectangle selection |
 | W / E / R | Move / rotate / scale |
 | G / hold Shift | Toggle snapping / temporary snapping |
 | F / Shift+F | Frame active object / whole set |
-| Ctrl+D | Duplicate selection |
+| Ctrl+D / Alt + Move-handle drag | Duplicate selection |
 | Delete | Delete unlocked selected objects |
 | Ctrl+Z / Ctrl+Y | Undo / redo |
 | Ctrl+S | Save project |
@@ -106,3 +125,5 @@ Open source. Free forever. Personal, professional and commercial use are welcome
 Use PNG/JPG in Dither or Library; transparent PNG for illustration/pattern assembly in Wobble or Repeat; rendered WebM for Pulse; or exact PNG frames for further animation. Save the .jago3d alongside the result so you can return to the original construction. These are file-based exports. Live editable handoff, direct Pulse family authoring, animated material GLB and Workscape tabs are not connected in this preview.
 
 Inspector editing keeps live controls, caret/focus and scroll position through routine value changes. Disclosure/layout changes restore scroll after the inspector is fully constructed.
+
+Version 0.4 browser checks: handling.cjs, drag-copy.cjs and examples-creations.cjs cover the personal shelf, independent source retention, selection, duplication and isolation-safe output. Native deep checking now also saves a creation in an isolated local shelf.
