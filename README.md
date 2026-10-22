@@ -1,39 +1,86 @@
-# Jago 3D Workshop · experimental 0.1
+# Jago 3D Workshop · experimental 0.2
 
-Make dimensional artwork, objects and little creative sets. This working title and preview are independent of the public suite; Pulse is unchanged.
+An offline workshop for dimensional artwork, sculptural forms, small creative sets and physical-output experiments. Working title; separate from the public suite. Pulse is unchanged.
 
-## Start
+## Open and try
 
-Open **Jago-3D-Workshop.exe**, or **Jago-3D-Workshop.html** in a recent desktop browser with WebGL2. Windows app: x64 Windows, .NET Framework and Microsoft Edge WebView2 Runtime. Keep the extracted files together. All bundled examples and core work run offline.
+Open **Jago-3D-Workshop.exe**, or the accompanying self-contained **Jago-3D-Workshop.html** in a recent WebGL2 desktop browser. Windows app: x64 Windows, .NET Framework and Microsoft Edge WebView2 Runtime. Keep the extracted files together.
 
-Try **Paper landscape**, **Dimensional lettering** or **Quiet studio vessels** in the example selector. Click an object to select it. Move / Rotate / Scale handles manipulate it; drag empty space to orbit, right-drag to pan and scroll to zoom. Front / Isometric and Frame set recover a useful view. F frames the selected object.
+Try Paper landscape, Dimensional lettering, Quiet studio vessels or Orbital line sculpture. Everything is editable. The last example demonstrates rings, iridescence, line rendering and individual object motion.
 
-## Make and arrange
+## Make
 
-Add a cut-out, lettering, profile form, block, sphere or pedestal. Draw an outline by clicking points, or edit a profile from base to top. Profile forms close to the rotation axis and are solid; hollow walls are not implemented. SVG import accepts simple filled outlines; text must be converted to paths. One material is applied to the imported filled artwork. PNG/JPG/WebP become flat textured cards. Arbitrary font import, SVG effects and automatic image-to-solid tracing are not supported yet.
+Add cut-outs, outlined SVG artwork, image cards, lettering, blocks, spheres, cones, rings, pedestals and rotational profile forms. SVG imports need simple filled outlines and text converted to paths; external assets/effects are rejected. SVG fills receive one material. Images remain textured planes. Built-in lettering uses the licensed bundled Latin typeface; arbitrary font import is future work.
 
-The Object inspector controls thickness, safe bounded edge rounding, surface colour and placement. **Repeat this object** provides line, ring and grid arrangements. Keep / lock protects an object during arrangement exploration. Surprise arrangement affects unlocked placement and colour. It is an early simple exploration tool, not a complete procedural modeller. Wood is currently a matte colour treatment, not a wood texture generator.
+**Draw outline** now supports placed points, freehand, dragging existing points, removing points with right-click, grid snapping, simplification and Undo/Redo. The drawing's top stays at the object's top. Crossed/degenerate outlines receive feedback. Use a simple closed outline; holes and general vector editing remain future work.
 
-Light & camera offers studio/warm/dramatic lighting, direction, strength, backdrop, ground/shadows and named camera views. Orthographic and perspective cameras are available. Turntable previews rotate the whole set.
+For profiles, draw the outer side from bottom to top. The object can be solid or hollow/open at the top. The wall control is a radial offset plus base thickness; sloping walls may have a smaller perpendicular thickness. Extreme thicknesses that do not fit the profile are rejected. Check physical output in a slicer.
 
-## Save
+## Arrange and snap
 
-Save project downloads a portable **.jago3d** containing construction recipes, embedded artwork, scene settings and cameras. Completed edits are also autosaved locally when browser storage permits. **Recover autosave** asks before replacing your set. Camera movement is captured when saving. Undo/Redo covers completed authoring edits; a drag is one edit. Keep portable saves for important work.
+Click selects; Ctrl-click adds/removes; Shift-click selects a range in the object list. Move handles translate the selected set. Rotate/scale handles affect the active object. Keep / lock protects an object during edits, layout exploration and creative look presets. Visibility is independent.
 
-## Output
+Enable **Snap** in the canvas toolbar or temporarily hold Shift while using a handle. **Snap settings** exposes grid spacing, angular increments, edge/centre attraction and surface attraction. Alignment buttons use the active object's bounds as reference. Rest on surface uses actual bounds, including rotation. The working surface has its own height and colour; Add a solid platform creates an actual editable/exportable object.
 
-- Image: PNG with optional transparency, or JPG, up to 4096 pixels per side. Transparent output omits the ground. Image export uses the current camera with the chosen output aspect.
-- Turntable: realtime WebM recording, up to 30 seconds and within 1920 × 1920. It is not exact-frame export and has no audio.
-- Scene: GLB with visible objects, materials, supported lights and the current camera. Environment lighting and custom construction semantics do not round-trip through GLB. Save the native project too.
-- Print: selected object/repeats as binary STL using millimetres. Open/non-manifold edges and degenerate triangle checks block obvious mesh problems. Thickness, intersections, repeated-part union and physical strength are not validated. Inspect in a slicer. No slicing or printer control is included.
-- Projection: clean secondary window, alignment grid, manual four-corner planar mapping, blackout and saved corners. Move it to your projector display and use Fullscreen. It is an early single-surface experiment, without curved-surface calibration, edge blending or multi-projector management. No physical projector test has been performed.
+Depth study explores an assembled illustration without scattering its X/Y layout. Gallery, grid, radial, stack and scatter modes deliberately reposition separate objects. Generate from seed repeats the current exploration basis; Surprise arrangement chooses a fresh seed. Compare 3 directions previews alternatives before Apply. Editing the set establishes a new basis. Locks stay authoritative.
+
+## Creative finishes, stage and lighting
+
+The selected object's Drawing style offers solid, ink outlines, cel/poster shading, edges without faces, triangular wireframe, neon terminal lines, X-ray and clay. Ink width affects the ink/cel silhouette; ordinary GPU edge lines remain thin. Material finishes include paper, ceramic, metal, procedural wood/checker, plastic, glass and iridescence.
+
+The whole-set Creative looks shelf includes Ink on paper, 90s terminal, Blueprint study, Clay maquettes and Illustrated poster. These change unlocked object appearances and stage choices; geometry stays editable and Undo is available.
+
+Light & camera has solid, gradient and imported-image backdrops, independent surface colour/height, editable platforms and named cameras. Lighting includes studio, warm, dramatic, neon split, sculptural rim and flat starts. Advanced controls expose key elevation/colour, fill and rim colours/strengths, ambient light, environment reflections, exposure and shadow softness.
+
+## Motion and export
+
+Choose Turntable, Object motions or both beside Play. Each object can float, spin, orbit or sway with amount and phase. Motion is evaluated from absolute time and loops over the chosen duration. Pause returns to the modelling/rest pose. Physical preparation uses that rest pose.
+
+- PNG/JPG from the current camera, with output dimensions up to 4096 per side. Transparent PNG omits the working ground.
+- Exact PNG frame sequences as ZIP: 12/24/30 fps, known sample times and timing metadata. A 32-million-pixel sequence budget requires smaller images or shorter durations for longer clips. Cancellation is available.
+- Realtime silent WebM motion recording remains available; it follows playback rather than guaranteeing exact frames.
+- GLB scene interchange includes visible geometry, supported materials/lights and the current camera. Procedural shader/ink treatments and environment lighting may differ in another viewer. PNG/video preserve the rendered look; the native project preserves editable recipes.
+
+## Prepare for 3D printing
+
+Choose selected object(s) or all visible solid objects. Image cards are excluded. The bundled Manifold engine prepares solids locally in a cancellable worker. Join intersecting solids performs a real boolean union. Optional base plate adds a four-millimetre plate with overlap; parts which still do not connect remain separate shells.
+
+The preparation report shows dimensions, triangles, volume, connected shells and fit within the chosen bed bounds. Output is Z-up and moved onto the bed. Export STL (interpreted as millimetres) or 3MF (explicit millimetre units and indexed geometry).
+
+This does not generate supports, slice a model or control a printer. A valid closed manifold is not a guarantee of sufficient wall thickness, printable overhangs, strength or material suitability. Inspect the exported object and layers in your slicer and perform representative prints. General authoring booleans and arbitrary mesh repair remain future work.
+
+## Projection
+
+Add up to four named planar surfaces. Each displays the full scene or a chosen object. Drag numbered corners on the mapping canvas; arrow keys nudge the last corner and Shift makes a larger nudge. Convex outlines are required. Keep a projector camera to orbit the working scene independently, or choose a live working camera.
+
+Open the clean output, move it onto the projector display and use Fullscreen. The alignment grid, per-surface enable state, blackout and camera/corners are saved in the project. Space in the output toggles blackout. This is manual planar mapping, not automatic calibration, curved-surface mapping, edge blending or multi-projector management. Output currently uses a throttled editor-canvas capture path rather than a low-latency live-performance transport. It still needs physical projector testing. Independent source-object isolation keeps the other scene objects out of that surface's output.
+
+## Save and shortcuts
+
+Save project downloads a portable .jago3d containing artwork, construction, materials, motion, cameras, lighting and mapping. Completed authoring edits are also locally autosaved when storage permits. Recover autosave asks before replacing your set. Browser storage is not a backup; save portable projects for important work.
+
+| Key | Action |
+|---|---|
+| W / E / R | Move / rotate / scale |
+| G / hold Shift | Toggle snapping / temporary snapping |
+| F / Shift+F | Frame active object / whole set |
+| Ctrl+D | Duplicate selection |
+| Delete | Delete unlocked selected objects |
+| Ctrl+Z / Ctrl+Y | Undo / redo |
+| Ctrl+S | Save project |
+| 1 / 3 / 7 | Front / side / top view |
+| O | Orthographic / perspective |
+| H | Hide/show active object |
+| Space | Play/pause motion |
+
+Typing and open dialogs take precedence. Focus canvas can be exited with Escape.
 
 ## Development
 
-Source in Source/. Pinned dependency versions in dependency-versions.json/package.json. With Python available, `python fetch.py` fetches the pinned packages into node_modules. With Node available, `node build.mjs` builds the self-contained HTML. Native compile script is Build.ps1 and uses the checked dependency directory. Do not change pinned versions without reviewing notices and testing.
+Pinned packages: Three.js 0.186.1, Manifold 3.5.4, fflate 0.8.3 and esbuild 0.28.2 (build tool). Notices are bundled. With Python available, run `python fetch.py` to fetch integrity-checked pinned dependencies. With Node available, `node build.mjs` bundles the main app, WASM and print worker into the offline HTML. Build.ps1 compiles the x64 Windows host with the included WebView2 payload. No runtime CDN or account is required.
 
-`node --test Tests/model.test.mjs` checks the document model. Browser tests require Playwright (set PLAYWRIGHT_PATH to its installed package directory) and Edge. Run Tests/browser.cjs then Tests/outputs.cjs; outputs stay in Checks/ and must not be bundled as user media. Native startup checks use `--check <private-directory>` and an isolated profile.
+Run `node --test Tests/model.test.mjs Tests/authoring.test.mjs`. Browser workflows use Edge and Playwright, selected by PLAYWRIGHT_PATH; run browser.cjs, outputs.cjs, expanded.cjs, solids.cjs motion.cjs and cancel.cjs. independent.mjs reloads exported GLB/STL. verify-files.py (Pillow) independently checks exact-frame ZIPs and manufacturing archives. Test output stays in Checks/, outside user packages. Native `--deep-check <private-directory>` uses an isolated profile and verifies the solid worker as well as startup.
 
-This prototype has a 64-object / 240-instance budget, limited artwork sizes and a bounded texture cache. GPU/browser differences still need testing on real machines. Workscape tab integration, full PBR Material exchange, robust booleans, hollow fabrication, arbitrary fonts and exact-frame animation remain future work.
+The preview retains 64 objects / 240 repeated instances, artwork/cache limits, solid-operation triangle/time limits and exact-sequence budgets. Physical GPU/DPI/multi-monitor, printer and projector testing remain necessary. Workscape live tabs, full Material exchange, arbitrary fonts and general modelling/constraint systems are still future work.
 
 Open source. Free forever. Personal, professional and commercial use are welcome. Imported assets and third-party components retain their own licences. See LICENSE.txt and Notices/.

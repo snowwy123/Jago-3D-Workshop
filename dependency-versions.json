@@ -1,5 +1,7 @@
 {
   "three": "0.186.1",
   "esbuild": "0.28.2",
-  "@esbuild/win32-x64": "0.28.2"
+  "@esbuild/win32-x64": "0.28.2",
+  "manifold-3d": "3.5.4",
+  "fflate": "0.8.3"
 }

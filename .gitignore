@@ -4,4 +4,4 @@ Checks/
 *.dll
 Jago-3D-Workshop.html
 
-!Dependencies/**/*.dll
+Source/print-worker-source.js

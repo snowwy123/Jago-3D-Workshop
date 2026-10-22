@@ -3,7 +3,7 @@ import urllib.request,json,tarfile,io,hashlib,base64
 r=Path(__file__).parent
 versions={}
 pinned=json.loads((r/"dependency-versions.json").read_text(encoding="utf-8")) if (r/"dependency-versions.json").exists() else {}
-for name in ['three','esbuild','@esbuild/win32-x64']:
+for name in ['three','esbuild','@esbuild/win32-x64','manifold-3d','fflate']:
  meta=json.load(urllib.request.urlopen('https://registry.npmjs.org/'+name.replace('/','%2f')))
  version=pinned.get(name) or (versions.get('esbuild') if name.startswith('@') else meta['dist-tags']['latest'])
  data=meta['versions'][version];versions[name]=version
