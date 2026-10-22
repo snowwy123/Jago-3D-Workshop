@@ -1,0 +1,7 @@
+node_modules/
+Checks/
+*.exe
+*.dll
+Jago-3D-Workshop.html
+
+!Dependencies/**/*.dll

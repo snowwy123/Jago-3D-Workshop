@@ -1,0 +1,1 @@
+{"name":"jago-3d-workshop-experiment","version":"0.1.0","private":true,"type":"module","scripts":{"build":"node build.mjs","test":"node --test Tests/*.test.mjs"},"dependencies":{"three":"0.186.1"},"devDependencies":{"esbuild":"0.28.2"}}
