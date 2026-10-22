@@ -1,4 +1,4 @@
-# Jago 3D Workshop · experimental 0.3
+# Jago 3D Workshop · experimental 0.3.1
 
 An offline workshop for dimensional artwork, sculptural forms, small creative sets and physical-output experiments. Working title; separate from the public suite. Pulse is unchanged.
 
@@ -104,3 +104,5 @@ Open source. Free forever. Personal, professional and commercial use are welcome
 ## Exchange with the suite
 
 Use PNG/JPG in Dither or Library; transparent PNG for illustration/pattern assembly in Wobble or Repeat; rendered WebM for Pulse; or exact PNG frames for further animation. Save the .jago3d alongside the result so you can return to the original construction. These are file-based exports. Live editable handoff, direct Pulse family authoring, animated material GLB and Workscape tabs are not connected in this preview.
+
+Inspector editing keeps live controls, caret/focus and scroll position through routine value changes. Disclosure/layout changes restore scroll after the inspector is fully constructed.
