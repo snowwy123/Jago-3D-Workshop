@@ -1,6 +1,6 @@
-# Jago 3D Workshop · experimental 0.4.0
+# Jago 3D Workshop · experimental 0.5.0
 
-An offline workshop for dimensional artwork, sculptural forms, small creative sets and physical-output experiments. Working title; separate from the public suite. Pulse is unchanged.
+An offline workshop for dimensional artwork, sculptural forms, small creative sets and physical-output experiments. Working title; separate from the public suite. Shares the original analytic water and atmosphere model with the experimental Pulse branch.
 
 ## Open and try
 

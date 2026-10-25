@@ -1,0 +1,3 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import E from '../Source/shared-environment.cjs';
+test('water wave phase is periodic and finite across parameter boundaries',()=>{for(const style of E.styles)for(const amplitude of [0,.22,1.5])for(let i=0;i<30;i++){const s={style,amplitude,period:12,seed:i};let a=E.height(i*.7,-i*.2,1.25,s),b=E.height(i*.7,-i*.2,13.25,s);assert.ok(Number.isFinite(a));assert.ok(Math.abs(a-b)<1e-11);}});
+test('water settings reject unsafe colours and bound imported numeric values',()=>{assert.throws(()=>E.settings({water:'url(http://x)'}));let s=E.settings({amplitude:Infinity,seed:-42,extent:1e9});assert.equal(s.amplitude,E.defaults.amplitude);assert.equal(s.seed,0);assert.equal(s.extent,16000);});
