@@ -1,4 +1,4 @@
-# Jago 3D Workshop · experimental 0.6.0
+# Jago 3D Workshop · experimental 0.7.0
 
 An offline workshop for dimensional artwork, sculptural forms, small creative sets and physical-output experiments. Working title; separate from the public suite. Shares the original analytic water and atmosphere model with the experimental Pulse branch.
 
@@ -141,4 +141,4 @@ Supported main project extensions: .jago, .jagodither, .jagorepeat, .jagoworld, 
 
 ## Surface workshop preview
 
-See [Surface workflow](Docs/Surface-Workshop.md) for importing artwork, shaping sheets and exchanging an offline surface package between Material and Workshop. The sheet model is artistic posing with periodic wind, not a physical cloth solver.
+See [Surface workflow](Docs/Surface-Workshop.md) for importing artwork, shaping sheets and exchanging an offline surface package between Material and Workshop. Workshop supports editable sheet posing plus a fixed-step cloth solver with baked motion for repeatable playback/export. See the workflow guide for collision and loop limits.

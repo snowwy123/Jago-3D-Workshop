@@ -1,0 +1,25 @@
+// Original position-constraint cloth: fixed 120 Hz steps, structural/shear/bend links.
+// Simulation is explicitly baked; rendering and seeking never advance the solver.
+import {sheetSettings,sheetPoint} from './sheet-model.js';
+export const COLS=24,ROWS=20;
+export function clothSignature(o){const s=o.sheet;return JSON.stringify([o.width,o.height,s.bend,s.drape,s.fold,s.curl,s.pins,s.anchors,s.marks,s.frozenWind,s.physics]);}
+export function createCloth(o){
+ const s=sheetSettings(o.sheet),positions=new Float64Array((COLS+1)*(ROWS+1)*3),previous=new Float64Array(positions.length),fixed=new Map(),links=[];
+ const index=(x,y)=>y*(COLS+1)+x;
+ for(let y=0;y<=ROWS;y++)for(let x=0;x<=COLS;x++){const i=index(x,y),p=sheetPoint(x/COLS,1-y/ROWS,o.width,o.height,s,0);positions.set(p,i*3);if((s.pins==='top'&&y===0)||(s.pins==='corners'&&y===0&&(x===0||x===COLS)))fixed.set(i,p);}
+ for(const a of s.anchors){const i=index(Math.round(a.u*COLS),Math.round((1-a.v)*ROWS)),p=[(a.u-.5)*o.width+a.x,a.v*o.height+a.y,a.z];positions.set(p,i*3);fixed.set(i,p);}
+ previous.set(positions);
+ const link=(a,b,strength)=>{const ax=a% (COLS+1),ay=Math.floor(a/(COLS+1)),bx=b%(COLS+1),by=Math.floor(b/(COLS+1));links.push([a,b,Math.hypot((ax-bx)*o.width/COLS,(ay-by)*o.height/ROWS),strength]);};
+ for(let y=0;y<=ROWS;y++)for(let x=0;x<=COLS;x++){const a=index(x,y);if(x<COLS)link(a,index(x+1,y),1);if(y<ROWS)link(a,index(x,y+1),1);if(x<COLS&&y<ROWS){link(a,index(x+1,y+1),.8);link(index(x+1,y),index(x,y+1),.8);}if(x<COLS-1)link(a,index(x+2,y),s.physics.bend);if(y<ROWS-1)link(a,index(x,y+2),s.physics.bend);}
+ let steps=0;const dt=1/120;
+ function step(){const t=steps++*dt,p=s.physics;for(let i=0;i<positions.length/3;i++){if(fixed.has(i))continue;const at=i*3;for(let k=0;k<3;k++){const old=positions[at+k],force=k===1?-p.gravity:k===2?p.wind*(.6+.4*Math.sin(t*3+i*.17)):p.wind*.12*Math.sin(t*2);positions[at+k]+= (old-previous[at+k])*(1-p.damping)+force*dt*dt;previous[at+k]=old;}}
+  for(let it=0;it<7;it++){
+   for(const [a,b,rest,strength] of links){const ia=a*3,ib=b*3,dx=positions[ib]-positions[ia],dy=positions[ib+1]-positions[ia+1],dz=positions[ib+2]-positions[ia+2],length=Math.hypot(dx,dy,dz);if(length<1e-8)continue;const wa=fixed.has(a)?0:1,wb=fixed.has(b)?0:1;if(!wa&&!wb)continue;const correction=(length-rest)/length*p.stiffness*strength/(wa+wb);for(const [k,d]of [[0,dx],[1,dy],[2,dz]]){positions[ia+k]+=d*correction*wa;positions[ib+k]-=d*correction*wb;}}
+   for(let i=0;i<positions.length/3;i++){if(fixed.has(i)){positions.set(fixed.get(i),i*3);continue;}const at=i*3;if(p.ground)positions[at+1]=Math.max(p.floor,positions[at+1]);if(p.sphere){const centre=[0,o.height*.45,-p.radius*.5],d=[positions[at]-centre[0],positions[at+1]-centre[1],positions[at+2]-centre[2]],len=Math.hypot(...d);if(len<p.radius){const direction=len>1e-8?d.map(v=>v/len):[0,0,1];for(let k=0;k<3;k++)positions[at+k]=centre[k]+direction[k]*p.radius;}}}
+  }
+  for(const v of positions)if(!Number.isFinite(v)||Math.abs(v)>5000)throw Error('Cloth became unstable. Reduce forces or reset the pose.');
+ }
+ return {positions,fixed,step,get steps(){return steps;}};
+}
+export async function bakeCloth(o,seconds=6,{progress=()=>{},cancel=()=>false}={}){if(!Number.isFinite(seconds)||seconds<1||seconds>12)throw Error('Bake between 1 and 12 seconds.');const sim=createCloth(o),fps=24,frames=[],count=Math.round(seconds*fps);for(let i=0;i<=count;i++){if(cancel())throw Error('Cloth bake cancelled. Your previous motion is kept.');if(i)for(let j=0;j<5;j++)sim.step();frames.push(Array.from(sim.positions,v=>Math.round(v*1000)/1000));if(i%4===0){progress(i/count);await new Promise(r=>setTimeout(r,0));}}return {cols:COLS,rows:ROWS,fps,duration:seconds,signature:clothSignature(o),frames};}
+export function sampleBake(b,u,v,turns){const frame=Math.max(0,Math.min(b.frames.length-1,turns*(b.frames.length-1))),a=Math.floor(frame),c=Math.min(a+1,b.frames.length-1),ft=frame-a,x=u*b.cols,y=(1-v)*b.rows,ix=Math.min(b.cols-1,Math.floor(x)),iy=Math.min(b.rows-1,Math.floor(y)),fx=x-ix,fy=y-iy;const point=(f,k)=>{const at=(xx,yy)=>b.frames[f][(yy*(b.cols+1)+xx)*3+k];return (at(ix,iy)*(1-fx)+at(ix+1,iy)*fx)*(1-fy)+(at(ix,iy+1)*(1-fx)+at(ix+1,iy+1)*fx)*fy;};return [0,1,2].map(k=>point(a,k)*(1-ft)+point(c,k)*ft);}

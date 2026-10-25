@@ -1,31 +1,52 @@
-# Material → 3D Workshop: surface playground
+# Material and Workshop: surface authoring and cloth
 
-Development preview · Material 0.17.0 / Workshop 0.6.0
+Development preview · Material 0.18.0 / 3D Workshop 0.7.0
 
-1. Open Material and choose **Surface workshop** near the top.
-2. Add torn paper, blind-stamped leather or foiled leather. This adds a layer to your document.
-3. Choose **Foil & impressions**, then **Import artwork**. PNG/WebP/JPG and simple self-contained SVG are supported. SVG marks are embedded as a raster image for this treatment; keep the original vector separately.
-4. Choose transparency coverage for a cut-out logo, or dark/light coverage for artwork on a solid background. Adjust scale, across/up-down placement, rotation, depth and edge softness. Compare, then Apply. Closing the comparison leaves the project unchanged.
-5. Use **Export / download all** for finished images and maps. **Lit appearance** bakes Material's lighting; **Colour** keeps the artwork colours.
-6. For dimensional staging, return to Surface workshop and **Export for Workshop**. Selected surface is the default; whole composition is optional. The package keeps the full original Material project alongside the chosen surface's four maps.
-7. Open Workshop, choose **From Material**, and select the `.jagosurface` file. You can also start with **New sheet** without Material.
-8. Choose a pose, edit bends/folds/curl and held edges. **Drag to pose** pulls the sheet toward/away from you with an upward/downward drag; **Finish posing** returns to normal movement. Escape cancels the active pull. One completed pull is one Undo step. Precision pulls are under Local pose handles.
-9. Choose Material surface maps to retain imported roughness/metallic, or override with paper, foil, holographic film, cloth or leather. Imported normal detail remains available. The finish presets are artistic approximations, not manufacturing models.
-10. For subtle motion, open Gentle motion, set Wind and choose Object motions beside Play. Integer cycles repeat across the clip. Freeze current wind pose keeps the sampled deformation still. Clear frozen wind removes it; Wind can be re-enabled separately.
-11. Light & camera holds scene lights/background/cameras. Use your creation exports a lit PNG/JPG, GLB scene or motion. Save project retains the sheet recipe and source. **Save original Material project** recovers the original source snapshot; Workshop's subsequent lighting/shape edits do not modify that snapshot.
+Extract the preview ZIP. Open Material/Jago-Material.exe and Workshop/Jago-3D-Workshop.exe from their folders. Offline HTML editions are included. This portable preview leaves your installed suite unchanged.
 
-## What transfers
+## Artwork → finished surface
 
-Colour, normal, roughness and metallic maps; a Material source snapshot; no external image paths or network dependency. Workshop owns the sheet geometry, camera, finish overrides and scene lighting. Changing the Material source later requires exporting and importing a new package. This is not a live editable material connection.
+In Material choose **Surface workshop**, add a surface, then **Foil & impressions**. Import PNG/JPG/WebP or a self-contained outlined SVG. The SVG becomes an embedded raster mark for this treatment; keep your vector original separately.
 
-Material colours can include artistic highlights. Adding Workshop lighting will therefore differ from Material's Lit view. These are generated artistic maps rather than measured physical material scans. A sheet has no solid thickness: use it for pictures/scenes, not as print-ready geometry. GLB retains posed geometry and supported material data; custom appearances and animation may differ in other viewers.
+On **Proposed finish**, choose Move, Scale or Rotate and drag directly on the preview. Shift snaps rotation to 15 degrees. Centre horizontally/vertically aligns the mark. Precise placement sliders remain beside it. Centre guides are preview-only. Apply makes one undoable edit; closing cancels the comparison.
 
-## Examples
+Material's **Lit appearance** exports its shaded look. Colour and individual maps remain separate; Download all contains both and your editable project.
 
-The Examples folder contains North (cotton paper and foil), Field (blind-pressed leather) and Sol (foil ribbon), with `.jagomaterial`, `.jagosurface`, `.jago3d`, lit and staged PNGs. All are original sample text/artwork. Open native project files through their app's Open command. From Material imports surface packages in Workshop.
+## Material → an object in 3D Workshop
 
-## Testing this preview
+1. In Material's Surface workshop, choose **Export for Workshop**. Selected surface layer is the default; whole composition is optional. Save the `.jagosurface` package.
+2. In Workshop select the target object. Under Artwork on a surface, choose **Apply to selected object**, then **From Material** and open the package.
+3. Colour, normal, roughness and metallic maps attach to that object. Geometry, placement and the scene stay intact. Basic shapes, image cards and outlined/extruded objects use their existing UV mapping; combined solids do not yet have artwork UV mapping and are explicitly excluded.
+4. To revise artwork later, export another package from Material. On the object choose **Update from Material**. Its placement, sheet settings, pins, baked motion, camera and lighting are preserved.
 
-Extract the portable folders and keep their supporting files together. Material and Workshop each include a Windows executable and offline HTML edition. Workshop remains an independent experimental tool; this preview does not update your installed suite automatically. Your existing installed apps and personal documents have not been replaced.
+Choose **Add a new sheet** instead when you want a flexible surface. Material source is retained with the object and can be saved out for further Material editing. This is an offline file exchange, not a live connection: Workshop shape/lighting changes do not rewrite that original source.
 
-Try your own logo on one swatch, cancel a comparison, apply another, Undo, send the selected layer and reopen both saved projects. Feedback on finding controls and getting the desired appearance matters as much as a successful export. Actual other-PC/DPI testing remains necessary.
+Material data is artistic rather than measured. Colour can contain authored highlights, so additional Workshop lighting will not match Material Lit pixel for pixel. Mapping follows the object's UVs: boxes repeat across faces and spheres wrap around. UV repeat and flow keep the surface channels together without altering other objects' copies. A thin surface is not automatically a solid printable object.
+
+## Shape, pins, finish and lighting
+
+Select a sheet and use the Shape / Pins / Cloth / Finish / Lighting shortcuts above its controls. Pose presets, bends, folds, curl and soft pulls remain editable. Drag to pose commits one pull on release; Escape cancels it.
+
+Under **Movable attachment pins**, add two top pins and show their numbered handles. Drag a handle in the scene to reposition its attachment. Precise attachment coordinates and offsets are also available. Release preset edge if you want only custom pins holding the sheet. Moving pins changes the starting configuration and invalidates the existing physics bake; Undo can restore it.
+
+In **Light & camera**, Product staging provides paper/daylight, leather/grazing-light and foil/reflection starting points. These alter the scene and camera, preserving object transforms. Undo restores the previous stage. Fine lighting controls stay below.
+
+## Cloth physics
+
+Open **Cloth physics**, choose a feel and adjust gravity, wind, bend resistance and damping. Choose a local floor/sphere collision guide if useful, then **Simulate & bake motion**. Previous motion stays until the bake completes. Cancel keeps it unchanged.
+
+The solver uses fixed time steps with structural, shear and bend-distance constraints. Once baked, Play and the timeline sample saved positions instead of continuing a live simulation. Choose Object motions to view the cloth without rotating the entire set. Freeze this cloth frame keeps one sampled pose; Remove baked motion returns to the editable starting shape and gentle wind.
+
+Bakes cover up to 12 simulated seconds at 24 fps; longer composition clips retime that motion. Exact frame export samples the same saved positions. A simulation does not automatically return to its starting shape, so it is not inherently a seamless loop. Bake/settings, original source, sheet and scene are saved in the Workshop project.
+
+The current solver is for creative cloth studies: rectangular sheets, up to eight attachment pins and local floor/sphere guides. It does not simulate self-collision, garment seams or collisions with arbitrary scene objects. Alpha cut-outs change appearance, not the physical sheet mesh. Collision guides are in sheet-local coordinates, independent of the scene's ground. Sheets still have no solid thickness and are excluded from printing.
+
+## Examples and testing
+
+**Signal** includes an original printed-cloth design, Material package and baked Workshop project. **Walnut** demonstrates a Material surface applied to a block and sphere. Open source projects through their app's Open command; import surface packages through From Material.
+
+Try changing a mark, applying the surface to an object, revising its maps without losing the scene, moving a pin, baking, cancelling, freezing, Undo, save/reopen and export. Other-PC, mixed-DPI and long-session testing remains useful. Generated material maps, cloth motion and lighting are creative approximations rather than fabrication guarantees.
+
+## Ocean foam update
+
+Workshop and the included Pulse 0.12.2 preview share the revised ocean foam. Find coverage, patch size and residue in the existing water controls. Foam follows wave crests with irregular rounded detail and repeatable residue. See Docs/Ocean-Foam.md in either folder. This is an analytic appearance, not shoreline or fluid simulation.

@@ -1,4 +1,5 @@
 {
-  "sha256": "50f9e24e3a3bf81f38dcd5a63e114efa8709c4d2881378152519e037a2d02547",
-  "module": "Original Jago analytic environment 0.1.0"
+  "version": "0.2.0",
+  "sha256": "96fee9dac44d6a07ab7fc4c33639bd1c4990218077fedd8b83b02140beaaebd7",
+  "sharedRenderer": "Original Jago analytic water / foam"
 }
