@@ -1,4 +1,4 @@
-# Jago 3D Workshop · experimental 0.5.0
+# Jago 3D Workshop · experimental 0.5.1
 
 An offline workshop for dimensional artwork, sculptural forms, small creative sets and physical-output experiments. Working title; separate from the public suite. Shares the original analytic water and atmosphere model with the experimental Pulse branch.
 
@@ -127,3 +127,13 @@ Use PNG/JPG in Dither or Library; transparent PNG for illustration/pattern assem
 Inspector editing keeps live controls, caret/focus and scroll position through routine value changes. Disclosure/layout changes restore scroll after the inspector is fully constructed.
 
 Version 0.4 browser checks: handling.cjs, drag-copy.cjs and examples-creations.cjs cover the personal shelf, independent source retention, selection, duplication and isolation-safe output. Native deep checking now also saves a creation in an isolated local shelf.
+
+## Saved project previews
+
+Saving adds a small embedded cover for Library and Windows Explorer. Open an older project and save it again to add one. The cover travels inside the project; no companion image file is required.
+
+Library reads saved covers directly for imported projects and linked folders. Older linked projects without covers show a named placeholder until re-saved. Artwork projects use their rendered content; Sound and Workscape use concise project summaries. Library uses an active reference board or layout when available, otherwise a collection summary.
+
+Windows Explorer needs the optional Jago Explorer Thumbnails Windows component. Its setup asks for administrator approval and keeps the reader isolated from Explorer. It does not change which app opens your files. Use medium, large or extra-large icons. Windows' own thumbnail settings still apply. The component can be removed through Windows Apps without removing projects or creative apps.
+
+Supported main project extensions: .jago, .jagodither, .jagorepeat, .jagoworld, .jagomaterial, .jagomusic, .jagolibrary, .jagopulse, .jago3d and .jagoworkspace. Companion captures already use normal image/video formats; Markdown exports are not reassociated. Recipe/preset previews and automatic batch regeneration of old projects are future work.
