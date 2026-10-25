@@ -1,0 +1,6 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';
+import {sheetSettings,sheetPoint} from '../Source/sheet-model.js';
+test('pinned edge and corner constraints survive bends, pulls and motion',()=>{for(const pins of ['top','corners']){const s=sheetSettings({pins,wind:15,bend:80,marks:[{u:0,v:1,amount:50,radius:.4}]});for(const t of [0,.25,.7,1])for(const u of pins==='top'?[0,.2,.5,.8,1]:[0,1])assert.ok(Math.abs(sheetPoint(u,1,150,180,s,t)[2])<1e-12);}});
+test('wind is periodic and a frozen pose matches the sampled surface',()=>{const s=sheetSettings({wind:11,phase:.12,cycles:3}),t=.37,held=sheetSettings({...s,wind:0,frozenWind:{amount:s.wind,phase:(t*s.cycles+s.phase)%1}});for(let u=0;u<=1;u+=.1)for(let v=0;v<=1;v+=.1){const a=sheetPoint(u,v,150,180,s,t),b=sheetPoint(u,v,150,180,s,t+1),c=sheetPoint(u,v,150,180,held,0);assert.ok(Math.abs(a[2]-b[2])<1e-10);assert.ok(Math.abs(a[2]-c[2])<1e-10);}});
+test('invalid dimensions and huge pose input stay bounded',()=>{const s=sheetSettings({bend:Infinity,wind:999,marks:Array(100).fill({amount:999})});assert.equal(s.bend,18);assert.equal(s.wind,15);assert.equal(s.marks.length,24);assert.ok(s.marks.every(x=>x.amount===50));assert.throws(()=>sheetSettings({marks:'oops'}));});
+
