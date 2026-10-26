@@ -142,3 +142,7 @@ Supported main project extensions: .jago, .jagodither, .jagorepeat, .jagoworld, 
 ## Surface workshop preview
 
 See [Surface workflow](Docs/Surface-Workshop.md) for importing artwork, shaping sheets and exchanging an offline surface package between Material and Workshop. Workshop supports editable sheet posing plus a fixed-step cloth solver with baked motion for repeatable playback/export. See the workflow guide for collision and loop limits.
+
+## Cloth playground · 0.8.0 preview
+
+Handle fabric directly in a temporary experiment, then keep an undoable pose or discard it. Three original cloth studies, four starting directions, visible local collision guides, horizontal draping, and expanded satin/chrome/holo/fabric controls are included. Bake motion from a kept pose; reuse results through My creations. See [Cloth playground](Docs/Cloth-Playground.md) for workflow and limits. Material remains an optional offline file exchange.

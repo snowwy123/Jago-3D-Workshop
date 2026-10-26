@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 using System;using System.IO;using System.Drawing;using System.Windows.Forms;using Microsoft.Web.WebView2.Core;using Microsoft.Web.WebView2.WinForms;
-[assembly:System.Reflection.AssemblyTitle("Jago 3D Workshop")][assembly:System.Reflection.AssemblyVersion("0.7.0.0")]
+[assembly:System.Reflection.AssemblyTitle("Jago 3D Workshop")][assembly:System.Reflection.AssemblyVersion("0.8.0.0")]
 static class Program {internal static string Check;internal static bool Deep;[STAThread]static void Main(string[] args){if(args.Length==2&&(args[0]=="--check"||args[0]=="--deep-check"))Check=Path.GetFullPath(args[1]);Deep=args.Length>0&&args[0]=="--deep-check";Application.EnableVisualStyles();Application.SetCompatibleTextRenderingDefault(false);Application.Run(new Workshop());}}
 sealed class Workshop:Form {
  readonly WebView2 web=new WebView2{Dock=DockStyle.Fill};bool closing,ready;

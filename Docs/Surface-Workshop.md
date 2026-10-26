@@ -1,6 +1,6 @@
 # Material and Workshop: surface authoring and cloth
 
-Development preview · Material 0.18.0 / 3D Workshop 0.7.0
+Development preview · Material 0.18.0 / 3D Workshop 0.8.0
 
 Extract the preview ZIP. Open Material/Jago-Material.exe and Workshop/Jago-3D-Workshop.exe from their folders. Offline HTML editions are included. This portable preview leaves your installed suite unchanged.
 
@@ -50,3 +50,7 @@ Try changing a mark, applying the surface to an object, revising its maps withou
 ## Ocean foam update
 
 Workshop and the included Pulse 0.12.2 preview share the revised ocean foam. Find coverage, patch size and residue in the existing water controls. Foam follows wave crests with irregular rounded detail and repeatable residue. See Docs/Ocean-Foam.md in either folder. This is an analytic appearance, not shoreline or fluid simulation.
+
+## Direct cloth handling
+
+Workshop 0.8.0 adds Handle fabric, a reversible playground, three original examples, four cloth directions and finer fabric/foil response. See [Cloth playground](Cloth-Playground.md).
