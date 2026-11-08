@@ -1,4 +1,4 @@
-# Jago 3D Workshop · experimental 0.7.0
+# Jago 3D Workshop · experimental 0.9.0
 
 An offline workshop for dimensional artwork, sculptural forms, small creative sets and physical-output experiments. Working title; separate from the public suite. Shares the original analytic water and atmosphere model with the experimental Pulse branch.
 
@@ -154,3 +154,13 @@ Open **Contour · pleated display** from Examples, or add a sheet and open **Fol
 **Save flat cut / score SVG** exports the original sheet dimensions in millimetres with a cut perimeter and separate mountain and valley score groups. It exports paths, so save the editable project separately for the artwork and 3D pose. The pattern represents parallel creases at equal intervals. Material allowance, kerf, collision checking and arbitrary crease graphs are outside this preview.
 
 **Fit & measurements** reports world-aligned bounds for the selection. Select two objects to also get the distance between their bounds centres. Measurements describe the current scene pose.
+
+## Model staging and presentation
+
+Use **Import GLB model** to bring in a static GLB 2.0 with embedded buffers and images. Import places the model on the working surface and fits large models within a 450 mm envelope. Named parts remain editable as a selection group. Ctrl-click selects an individual part. Under **Artwork, callouts & looks**, **Position and scale selection** can centre, ground or resize the selected set. This preview supports up to 32 mesh parts and 100,000 triangles per import, with base-colour textures and basic material properties. It flattens node transforms and does not preserve rigs, animation, material extensions or the full original hierarchy.
+
+**Surface artwork** places a PNG, JPEG or WebP on the selected surface. Set width and rotation in the inspector or choose **Drag to adjust artwork**, then drag horizontally for width and vertically for rotation. Release applies a single undoable edit. **Callouts** attach text to picked points on an object. Surface placement supports rigid objects and static sheet poses, including pleats. It does not track animated cloth deformation. Projected artwork has a limited depth and is best placed on one panel or a shallow surface.
+
+**Saved looks** records colours, finishes, base artwork and basic lighting in the project. Select any pair to compare at the same camera, then Apply a look as an undoable edit. Geometry, placement, decals and callouts stay shared. Locked objects retain their appearance.
+
+Under **Output → Image → Presentation sheet**, export a ZIP containing a contact sheet and three individual PNGs. It uses the first three named cameras when available, filling missing slots with a working, front or detail view. Captions, selection dimensions and visible callouts are optional. A selected creased sheet adds the flat cut-and-score drawing to the contact sheet and includes its SVG in the ZIP.

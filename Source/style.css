@@ -38,3 +38,11 @@ main { position: relative; }
     background: var(--accent);
   }
 }
+
+#calloutOverlay { position:absolute; inset:0; overflow:hidden; pointer-events:none; }
+#calloutOverlay span { position:absolute; background:#26383d; color:#fff6e6; border:1px solid #e6c786; border-radius:4px; padding:4px 7px; font-size:12px; max-width:180px; overflow-wrap:anywhere; }
+#canvas.surfacePlacement { cursor:crosshair; }
+#compareLookViews { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+#compareLookViews figure { margin:0; }
+#compareLookViews canvas { width:100%; height:auto; }
+#inspector:has([data-tab="scene"].active) #presentationTools { display:none; }
