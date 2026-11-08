@@ -1,4 +1,4 @@
-# Jago 3D Workshop · experimental 0.10.0
+# Jago 3D Workshop · experimental 0.11.0
 
 An offline workshop for dimensional artwork, sculptural forms, small creative sets and physical-output experiments. Working title; separate from the public suite. Shares the original analytic water and atmosphere model with the experimental Pulse branch.
 
@@ -6,7 +6,7 @@ An offline workshop for dimensional artwork, sculptural forms, small creative se
 
 Open **Jago-3D-Workshop.exe**, or the accompanying self-contained **Jago-3D-Workshop.html** in a recent WebGL2 desktop browser. Windows app: x64 Windows, .NET Framework and Microsoft Edge WebView2 Runtime. Keep the extracted files together.
 
-Try **Illustrated dimensional sign**, **Printable maker tag** or **Looping neon sign** for a grouped design, a flat single-shell print study, or travelling neon and moving patterns. Paper landscape, Dimensional lettering, Quiet studio vessels and Orbital line sculpture remain editable starts.
+The study picker includes **Shadow Relay**, **Signal Pavilion**, **Delta**, **Strata** and **Offset**. Each opens an editable set. Signal Pavilion combines pleated artwork, a callout, two saved looks, three camera views and projector cues. Delta comes with a print-ready net preset. Strata includes a hidden source solid for trying a new cut thickness. Offset includes a second camera that reveals the lettering’s depth.
 
 ## Make
 
@@ -122,7 +122,7 @@ Open source. Free forever. Personal, professional and commercial use are welcome
 
 ## Exchange with the suite
 
-Use PNG/JPG in Dither or Library; transparent PNG for illustration/pattern assembly in Wobble or Repeat; rendered WebM for Pulse; or exact PNG frames for further animation. Save the .jago3d alongside the result so you can return to the original construction. These are file-based exports. Live editable handoff, direct Pulse family authoring, animated material GLB and Workscape tabs are not connected in this preview.
+Use PNG/JPG in Dither or Library; transparent PNG for illustration/pattern assembly in Wobble or Repeat; a PNG or sprite sheet for Pulse; or exact PNG frames for further animation. Save the .jago3d alongside the result so you can return to the original construction. These are file-based exports. Live editable handoff, direct Pulse family authoring, animated material GLB and Workscape tabs are not connected in this preview.
 
 Inspector editing keeps live controls, caret/focus and scroll position through routine value changes. Disclosure/layout changes restore scroll after the inspector is fully constructed.
 
@@ -145,11 +145,11 @@ See [Surface workflow](Docs/Surface-Workshop.md) for importing artwork, shaping 
 
 ## Cloth playground · 0.8.0 preview
 
-Handle fabric directly in a temporary experiment, then keep an undoable pose or discard it. Three original cloth studies, four starting directions, visible local collision guides, horizontal draping, and expanded satin/chrome/holo/fabric controls are included. Bake motion from a kept pose; reuse results through My creations. See [Cloth playground](Docs/Cloth-Playground.md) for workflow and limits. Material remains an optional offline file exchange.
+Handle fabric directly in a temporary experiment, then keep an undoable pose or discard it. Four starting directions, visible local collision guides, horizontal draping, and expanded satin/chrome/holo/fabric controls are included. Bake motion from a kept pose; reuse results through My creations. See [Cloth playground](Docs/Cloth-Playground.md) for workflow and limits. Material remains an optional offline file exchange.
 
 ## Fold and cut pattern preview
 
-Open **Contour · pleated display** from Examples, or add a sheet and open **Fold & cut pattern** in the Object inspector. Set the panel count and tilt. Zero degrees shows the flat sheet. The artwork stays attached to the panels. Creases override soft bends and baked cloth while enabled, and disabling them restores the underlying sheet settings.
+Open **Signal Pavilion · folds & projection** from the study picker, or add a sheet and open **Fold & cut pattern** in the Object inspector. Set the panel count and tilt. Zero degrees shows the flat sheet. The artwork stays attached to the panels. Creases override soft bends and baked cloth while enabled, and disabling them restores the underlying sheet settings.
 
 **Save flat cut / score SVG** exports the original sheet dimensions in millimetres with a cut perimeter and separate mountain and valley score groups. It exports paths, so save the editable project separately for the artwork and 3D pose. The pattern represents parallel creases at equal intervals. Material allowance, kerf, collision checking and arbitrary crease graphs are outside this preview.
 
@@ -172,3 +172,20 @@ Open **More shapes & starters** in Make something for dimensioned primitives, in
 **Linked copies** creates another object that follows the source's geometry, finish and repeat settings. Position, rotation, scale, visibility and callouts are independent. Select source edits the shared design. Detach copy keeps the current shape for independent editing. Removing a source leaves the copies as editable snapshots. Baked cloth sheets and boolean result objects are outside this linkage workflow.
 
 In **Output → Projection → Projector rehearsal & cues**, set the projector from the working view, then close Output and orbit the scene. The grid or chosen image projects as a perspective light with shadows. Stage lighting is dimmed only in the rehearsal view to make the pattern readable. Save up to eight cues and fade between grid/image mix, power and tint. Cues use one shared projector aim and artwork image. The projector view, artwork and cues save with the project. Hide projector rehearsal returns to ordinary editing. Physical projector output uses the existing manual mapping setup. Rehearsal does not model lens calibration or exact real-world brightness.
+
+## Specialist tools · 0.11.0
+
+**Shadow Lab** opens a small panel alongside the scene. Fit and lock the XY screen, load an optional target image and adjust the point light's horizontal offset, height and distance. Move objects in the scene and compare the silhouette with the target. Save up to eight light positions. Export a transparent or opaque silhouette PNG, or a scene-and-shadow comparison PNG. This is a hard-shadow design preview with a flat receiver and no automatic geometry generation.
+
+**Specialist tools → Paper kits** makes an A4 box or triangular prism net with glue tabs, matching join numbers, cut and score groups, and an optional repeated base image from a selected object. A matching editable solid is available as a mockup. Print at actual size. The kit models ideal folds with no material-thickness or kerf allowance.
+
+**Stacked relief** takes midpoint cross-sections through one selected closed solid and exports up to 24 numbered SVGs. Check the layer count and optional 3 mm registration holes before export. A hole appears only when it fits every layer. Add assembled stack creates editable slices. Overlapping shells should be joined first. The top can round up to a full sheet thickness. Check fit with a sample cut.
+
+**Perspective lettering** sets editable Latin letters and digits along sightlines from the working view, with size compensation for depth. Open the saved alignment view to see the reveal. Keep it as the output camera, or export a placement guide with a PNG, CSV coordinates and camera JSON.
+
+## Render and hand off
+
+- **Output → Image** exports scene PNG or JPG. Use **Transparent** with PNG for compositing. Keep an output camera in Light & camera when you want to orbit without changing the shot. The same output area has presentation sheets, exact PNG sequences and silent WebM.
+- **Material** exchanges an embedded .jagosurface package through **Export for Workshop** and **From Material / Update from Material**. Colour, normal, roughness and metallic maps follow the receiving object's UVs. Workshop retains the Material source for later export and editing. See [Surface workflow](Docs/Surface-Workshop.md).
+- **Pulse** takes a rendered PNG as artwork. For motion, choose **Export Pulse sprite sheet** under Output → Image. Extract the PNG, import it into Pulse, add an image part in Visual workshop, and open **Animation · sprite sheet**. Enter 6 columns, 4 rows, 24 frames and 12 fps. This samples the Workshop clip and retimes it to two seconds. Change the frame rate in Pulse for a different playback speed. The ZIP includes the settings and instructions. WebM and raw PNG frame ZIPs are separate Workshop outputs.
+- **Library, Board, Dither, Wobble and Repeat** can use rendered stills as ordinary image assets. Keep the .jago3d project beside a finished render for editable geometry, materials, cameras and motion.

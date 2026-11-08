@@ -39,3 +39,12 @@ function removeDegenerate(source){const g=source.toNonIndexed(),pos=g.attributes
 // Mirroring SVG coordinates changes handedness. Reverse triangle winding too so
 // outward normals, CSG volumes and physical exports retain a positive solid.
 function reverseWinding(g){if(g.index){for(let i=0;i<g.index.count;i+=3){const b=g.index.getX(i+1);g.index.setX(i+1,g.index.getX(i+2));g.index.setX(i+2,b);}g.index.needsUpdate=true;}else for(const attribute of Object.values(g.attributes)){for(let i=0;i<attribute.count;i+=3)for(let k=0;k<attribute.itemSize;k++){const a=(i+1)*attribute.itemSize+k,b=(i+2)*attribute.itemSize+k,temp=attribute.array[a];attribute.array[a]=attribute.array[b];attribute.array[b]=temp;}attribute.needsUpdate=true;}g.computeVertexNormals();}
+
+export function letteringRatio(letter) {
+  const box=new T.Box2();
+  for(const shape of font.generateShapes(letter,60)) {
+    for(const point of shape.getPoints(12))box.expandByPoint(point);
+  }
+  const size=box.getSize(new T.Vector2());
+  return size.x>0&&size.y>0?size.x/size.y:.55;
+}

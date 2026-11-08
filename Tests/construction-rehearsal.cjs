@@ -50,7 +50,7 @@ const {pathToFileURL}=require('node:url');
       await p.locator('#addConstruction').click();
       assert.equal(await p.evaluate(()=>JagoWorkshop.project.objects.at(-1).groupName),name);
     }
-    await p.locator('#examples').selectOption('pleated-display');
+    await p.evaluate(key=>JagoWorkshop.loadExampleFixture(key),'pleated-display');
     await p.waitForFunction(()=>JagoWorkshop.project.objects[0]?.sheet?.crease);
     await p.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
     const before=await p.locator('#canvas').evaluate(e=>e.toDataURL());

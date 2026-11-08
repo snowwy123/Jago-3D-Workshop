@@ -39,7 +39,7 @@ const {unzipSync,strFromU8} = require('fflate');
     await page.locator('#glbFile').setInputFiles({name:'External.glb',mimeType:'model/gltf-binary',buffer:rejected});
     await page.waitForFunction(()=>document.querySelector('#presentationStatus').textContent.includes('Embed all buffers'));
     assert.equal(await page.evaluate(()=>JagoWorkshop.project.objects.length),parts);
-    await page.locator('#examples').selectOption('pleated-display');
+    await page.evaluate(key=>JagoWorkshop.loadExampleFixture(key),'pleated-display');
     await page.waitForFunction(()=>JagoWorkshop.project.objects[0]?.sheet?.crease);
     await open('Artwork, callouts & looks');
     await open('Callouts');
