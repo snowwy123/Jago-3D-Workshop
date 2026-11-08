@@ -15,3 +15,26 @@ body{height:100vh;display:flex;flex-direction:column}header{flex-shrink:0}header
 .clothGrip{display:flex;flex-direction:row;align-items:center;gap:8px;margin:6px 0}.clothGrip select{width:auto;padding:5px;font-size:12px}
 
 .cloth-session main{grid-template-columns:1fr}.cloth-session aside,.cloth-session .toolbar,.cloth-session .selectionBar,.cloth-session .viewbar,.cloth-session #sheetPinHandles{display:none}.cloth-session .stage{height:auto;min-height:0;flex:1}.cloth-session #viewport{min-height:300px}.cloth-session #clothPlaybar{max-height:50%;right:auto;max-width:calc(100% - 20px);width:660px}@media(max-width:780px){.cloth-session main{height:calc(100vh - 125px);min-height:400px}.cloth-session .stage{height:100%}}
+
+main { position: relative; }
+#objectSearch { width: 100%; margin-bottom: 8px; }
+#objectSearchStatus { margin: 0 0 8px; }
+#inspectorDivider { display: none; }
+@media (min-width: 781px) {
+  body:not(.focus):not(.cloth-session) main {
+    grid-template-columns: clamp(180px, 20vw, 238px) minmax(0, 1fr) var(--inspector-width, 285px);
+  }
+  body:not(.focus):not(.cloth-session) #inspectorDivider {
+    display: block;
+    position: absolute;
+    right: calc(var(--inspector-width, 285px) - 5px);
+    inset-block: 0;
+    width: 10px;
+    z-index: 6;
+    cursor: col-resize;
+    touch-action: none;
+  }
+  #inspectorDivider:hover, #inspectorDivider:focus-visible, #inspectorDivider[data-dragging] {
+    background: var(--accent);
+  }
+}
