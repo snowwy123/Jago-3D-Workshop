@@ -15,7 +15,7 @@ export function setupWorkspace(measure) {
     status.textContent = visible ? visible + ' matching objects' : 'No matching objects.';
   }
   search.addEventListener('input', filterObjects);
-  new MutationObserver(filterObjects).observe(objects, {childList: true});
+  new MutationObserver(filterObjects).observe(objects, {childList: true, subtree: true, attributes: true, attributeFilter: ['title']});
   filterObjects();
 
   const report = document.getElementById('measureReport');

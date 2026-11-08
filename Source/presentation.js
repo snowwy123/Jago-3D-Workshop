@@ -43,9 +43,9 @@ export function installPresentation(api) {
     const decal = $('decalSelect').value === '' ? null : object?.decals?.[+$('decalSelect').value];
     for (const [id,key] of [['decalSize','size'],['decalAngle','angle']]) {
       $(id).value = decal?.[key] ?? '';
-      $(id).disabled = !decal || !!object?.locked;
+      $(id).disabled = !decal || !!(object?.locked||object?.linkedSource);
     }
-    $('adjustDecal').disabled = $('removeDecal').disabled = !decal || !!object?.locked;
+    $('adjustDecal').disabled = $('removeDecal').disabled = !decal || !!(object?.locked||object?.linkedSource);
   }
   function cancelPlacement() {
     placement = null;
@@ -57,6 +57,7 @@ export function installPresentation(api) {
   function begin(kind) {
     const object = api.current();
     if (!object || object.locked) throw Error('Select an unlocked object first.');
+    if (kind==='decal'&&object.linkedSource) throw Error('Place shared artwork on the source object or detach this copy.');
     if (object.sheet?.wind || object.sheet?.bake && !object.sheet.crease) throw Error('Use a static sheet pose for surface placement.');
     if (kind==='decal' && object.decals.length>=6 || kind==='note' && object.callouts.length>=12) throw Error('This object has reached its placement limit.');
     api.pause();

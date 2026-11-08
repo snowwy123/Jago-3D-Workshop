@@ -13,6 +13,13 @@ export function installWorkbench({getProject,current,commit,getSelected,select,d
  const handoff=document.createElement('section');handoff.innerHTML='<h3>Reuse in another studio</h3><p>PNG/JPG → Dither or Library · transparent PNG → Wobble or Repeat · WebM → Pulse · exact PNG frames for further animation. Save the editable .jago3d beside your renders.</p><p class="hint">These are file exports. Live editable handoff and animated GLB materials are not connected yet.</p>';$('out-model').append(handoff);
  function inspector(){const o=current(),body=$('objectPanel').querySelector(':scope > div');if(!o||!body)return;
   const construction=document.createElement('details');construction.open=true;construction.innerHTML='<summary>Editable construction steps</summary><p class="hint">Source shape → thicken → round edges → repeat. Change these without baking the object.</p>';
+  if(o.type==='tube'){
+    const label=document.createElement('label'), wall=document.createElement('input');
+    label.textContent='Tube wall (mm)';
+    wall.id='tubeWall';wall.type='number';wall.min='.6';wall.max='30';wall.step='.1';wall.value=o.wall;
+    wall.onchange=()=>commit(()=>current().wall=Number(wall.value));
+    label.append(wall);construction.append(label);
+  }
   if(o.outline){const b=document.createElement('button');b.id='reopenOutline';b.textContent='Edit original outline…';b.onclick=()=>draw.open('edit');construction.append(b);}
   for(const [key,label]of [['thickenEnabled','Thicken'],['roundEnabled','Round edges'],['repeatEnabled','Repeat']]){if(key==='thickenEnabled'&&!['shape','svg','text'].includes(o.type)||key==='roundEnabled'&&!['shape','svg','text'].includes(o.type))continue;const l=document.createElement('label');l.className='inline';const check=document.createElement('input');check.type='checkbox';check.id='step-'+key;check.checked=o[key];check.onchange=()=>commit(()=>current()[key]=check.checked);l.append(check,label);construction.append(l);}body.prepend(construction);
   if(o.group){const groupLabel=document.createElement('label');groupLabel.textContent='Group name';const groupInput=document.createElement('input');groupInput.id='groupName';groupInput.value=o.groupName;groupInput.onchange=()=>commit(()=>{for(const part of getProject().objects)if(part.group===o.group&&!part.locked)part.groupName=groupInput.value;});groupLabel.append(groupInput);body.prepend(groupLabel);const info=document.createElement('p');info.className='hint';info.textContent='Group: '+o.groupName+' · selecting a member selects the group; Ctrl selects individual parts.';body.prepend(info);}

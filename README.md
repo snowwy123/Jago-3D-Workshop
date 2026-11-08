@@ -1,4 +1,4 @@
-# Jago 3D Workshop · experimental 0.9.0
+# Jago 3D Workshop · experimental 0.10.0
 
 An offline workshop for dimensional artwork, sculptural forms, small creative sets and physical-output experiments. Working title; separate from the public suite. Shares the original analytic water and atmosphere model with the experimental Pulse branch.
 
@@ -164,3 +164,11 @@ Use **Import GLB model** to bring in a static GLB 2.0 with embedded buffers and 
 **Saved looks** records colours, finishes, base artwork and basic lighting in the project. Select any pair to compare at the same camera, then Apply a look as an undoable edit. Geometry, placement, decals and callouts stay shared. Locked objects retain their appearance.
 
 Under **Output → Image → Presentation sheet**, export a ZIP containing a contact sheet and three individual PNGs. It uses the first three named cameras when available, filling missing slots with a working, front or detail view. Captions, selection dimensions and visible callouts are optional. A selected creased sheet adds the flat cut-and-score drawing to the contact sheet and includes its SVG in the ZIP.
+
+## Construction starters and projector rehearsal
+
+Open **More shapes & starters** in Make something for dimensioned primitives, including Capsule, Wedge and Tube. The tube's wall thickness is in Editable construction steps. Ribbed shade, Layered sign, Relief badge and Radial sculpture are editable groups. Ctrl-click a member to change its dimensions, finish or repeat settings.
+
+**Linked copies** creates another object that follows the source's geometry, finish and repeat settings. Position, rotation, scale, visibility and callouts are independent. Select source edits the shared design. Detach copy keeps the current shape for independent editing. Removing a source leaves the copies as editable snapshots. Baked cloth sheets and boolean result objects are outside this linkage workflow.
+
+In **Output → Projection → Projector rehearsal & cues**, set the projector from the working view, then close Output and orbit the scene. The grid or chosen image projects as a perspective light with shadows. Stage lighting is dimmed only in the rehearsal view to make the pattern readable. Save up to eight cues and fade between grid/image mix, power and tint. Cues use one shared projector aim and artwork image. The projector view, artwork and cues save with the project. Hide projector rehearsal returns to ordinary editing. Physical projector output uses the existing manual mapping setup. Rehearsal does not model lens calibration or exact real-world brightness.
