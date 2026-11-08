@@ -146,3 +146,11 @@ See [Surface workflow](Docs/Surface-Workshop.md) for importing artwork, shaping 
 ## Cloth playground · 0.8.0 preview
 
 Handle fabric directly in a temporary experiment, then keep an undoable pose or discard it. Three original cloth studies, four starting directions, visible local collision guides, horizontal draping, and expanded satin/chrome/holo/fabric controls are included. Bake motion from a kept pose; reuse results through My creations. See [Cloth playground](Docs/Cloth-Playground.md) for workflow and limits. Material remains an optional offline file exchange.
+
+## Fold and cut pattern preview
+
+Open **Contour · pleated display** from Examples, or add a sheet and open **Fold & cut pattern** in the Object inspector. Set the panel count and tilt. Zero degrees shows the flat sheet. The artwork stays attached to the panels. Creases override soft bends and baked cloth while enabled, and disabling them restores the underlying sheet settings.
+
+**Save flat cut / score SVG** exports the original sheet dimensions in millimetres with a cut perimeter and separate mountain and valley score groups. It exports paths, so save the editable project separately for the artwork and 3D pose. The pattern represents parallel creases at equal intervals. Material allowance, kerf, collision checking and arbitrary crease graphs are outside this preview.
+
+**Fit & measurements** reports world-aligned bounds for the selection. Select two objects to also get the distance between their bounds centres. Measurements describe the current scene pose.

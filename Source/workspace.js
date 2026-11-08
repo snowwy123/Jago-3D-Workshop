@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-export function setupWorkspace() {
+export function setupWorkspace(measure) {
   const search = document.getElementById('objectSearch');
   const objects = document.getElementById('objects');
   const status = document.getElementById('objectSearchStatus');
@@ -17,6 +17,20 @@ export function setupWorkspace() {
   search.addEventListener('input', filterObjects);
   new MutationObserver(filterObjects).observe(objects, {childList: true});
   filterObjects();
+
+  const report = document.getElementById('measureReport');
+  document.getElementById('measureSelection').addEventListener('click', () => {
+    const result = measure();
+    if (!result) {
+      report.textContent = 'Select an object to measure.';
+      return;
+    }
+    const mm = new Intl.NumberFormat(undefined, {maximumFractionDigits: 2});
+    report.textContent = 'World bounds (X × Y × Z): ' + result.size.map(value => mm.format(value)).join(' × ') + ' mm.';
+    if (result.centreDistance !== null) {
+      report.textContent += ' Bounds centres: ' + mm.format(result.centreDistance) + ' mm apart.';
+    }
+  });
 
   const divider = document.getElementById('inspectorDivider');
   const workspace = divider.parentElement;

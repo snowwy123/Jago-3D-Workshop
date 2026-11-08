@@ -1,3 +1,4 @@
+import {creaseSettings, creasePoint} from './creases.js';
 // Original explicit-time sheet model. Artistic deformation, not a cloth solver.
 const clamp=(v,d,a,b)=>Math.max(a,Math.min(b,Number.isFinite(+v)?+v:d));
 export function sheetSettings(s={}){
@@ -9,9 +10,11 @@ export function sheetSettings(s={}){
  value.anchors=(Array.isArray(s.anchors)?s.anchors:[]).slice(0,8).map(a=>({u:clamp(a.u,.5,0,1),v:clamp(a.v,1,0,1),x:clamp(a.x,0,-200,200),y:clamp(a.y,0,-200,200),z:clamp(a.z,0,-200,200)}));
  const p=s.physics||{};value.physics={gravity:clamp(p.gravity,180,0,600),wind:clamp(p.wind,35,0,200),stiffness:clamp(p.stiffness,.9,.3,1),bend:clamp(p.bend,.25,.02,1),damping:clamp(p.damping,.018,.002,.15),ground:p.ground!==false,floor:clamp(p.floor,0,-300,100),sphere:!!p.sphere,radius:clamp(p.radius,35,10,100),horizontal:!!p.horizontal};
  if(s.bake){const b=s.bake;if(b.cols!==24||b.rows!==20||b.fps!==24||!Array.isArray(b.frames)||b.frames.length<1||b.frames.length>289||b.frames.some(f=>!Array.isArray(f)||f.length!==1575||f.some(v=>!Number.isFinite(v)||Math.abs(v)>5000)))throw Error('Invalid baked cloth.');value.bake={cols:24,rows:20,fps:24,duration:clamp(b.duration,6,1,12),signature:String(b.signature||'').slice(0,10000),frames:b.frames};}
+ if(s.crease) value.crease=creaseSettings(s.crease);
  return value;
 }
 export function sheetPoint(u,v,width,height,s,time=0){
+ if(s.crease) return orientSheetPoint(creasePoint(u,v,width,height,s.crease),height,s);
  const edge=s.pins==='top'?1-v:s.pins==='corners'?Math.min(1,Math.hypot(u<.5?u:1-u,1-v)*3):1;
  const phase=2*Math.PI*(time*s.cycles+s.phase),x=(u-.5)*width,y=v*height;
  let z=s.bend*Math.pow(2*u-1,2)+s.drape*Math.sin(Math.PI*u)*(1-v)+s.fold*Math.sin(u*Math.PI*6+v*2)*Math.sin(Math.PI*u)+s.curl*Math.pow(1-v,3);
