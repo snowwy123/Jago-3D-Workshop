@@ -12,6 +12,13 @@ export function normaliseV3(p){
   o.flowAxis=['x','y','z'].includes(o.flowAxis)?o.flowAxis:'y';o.flowTurns=n(o.flowTurns,1,-8,8);o.emissionMode=['steady','breathe','travel'].includes(o.emissionMode)?o.emissionMode:'steady';
   o.motionCycles=n(o.motionCycles,1,0,8);o.motionAxis=['x','y','z'].includes(o.motionAxis)?o.motionAxis:'y';o.motionEase=['sine','triangle','hold'].includes(o.motionEase)?o.motionEase:'sine';
   o.roundEnabled=o.roundEnabled!==false;o.repeatEnabled=o.repeatEnabled!==false;o.thickenEnabled=o.thickenEnabled!==false;
+  if(o.outlineContours){
+    if(!Array.isArray(o.outlineContours)||!o.outlineContours.length||o.outlineContours.length>16)throw Error('Use 1–16 outline contours.');
+    o.outlineContours=o.outlineContours.map((c,i)=>{
+      if(!Array.isArray(c?.points)||c.points.length<3||c.points.length>160)throw Error('Use 3–160 points per contour.');
+      return {operation:i&&c.operation==='subtract'?'subtract':'add',points:c.points.map(q=>[n(q?.[0],0,0,180),n(q?.[1],0,0,120)])};
+    });
+  }
   if(o.outlineHoles){if(!Array.isArray(o.outlineHoles)||o.outlineHoles.length>8)throw Error('Use up to eight holes.');o.outlineHoles=o.outlineHoles.map(ring=>{if(!Array.isArray(ring)||ring.length<3||ring.length>160)throw Error('Use 3–160 points per hole.');return ring.map(q=>[n(q?.[0],0,0,180),n(q?.[1],0,0,120)]);});}o.outlineSmooth=!!o.outlineSmooth;if(o.outline){if(!Array.isArray(o.outline)||o.outline.length<3||o.outline.length>160)throw Error('Use 3–160 outline points.');o.outline=o.outline.map(q=>[n(q?.[0],0,0,180),n(q?.[1],0,0,120)]);}
  }
  return p;

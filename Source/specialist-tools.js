@@ -2,7 +2,7 @@
 import * as T from 'three';
 import {zipSync,strToU8} from 'fflate';
 import {paperKit,stackedLayers,layerPath} from './fabrication-lab.js';
-import {drawShadow} from './shadow-lab.js';
+import {drawShadow,shadowFrameSize} from './shadow-lab.js';
 
 const svgType='image/svg+xml';
 const svgPath=(path,width,height)=>'<svg xmlns="http://www.w3.org/2000/svg" width="'+width+'" height="'+height+'" viewBox="0 0 '+width+' '+height+'"><path fill-rule="evenodd" d="'+path+'"/></svg>';
@@ -61,7 +61,10 @@ export function installSpecialist(api) {
     try {
       const geometry=api.geometry(false);
       initialFrame ||= geometry.bounds;
-      drawShadow(canvas,geometry,{...state,frame:state.frame||initialFrame});
+      const frame=state.frame||initialFrame;
+      drawShadow(canvas,geometry,{...state,frame});
+      const behind=geometry.bounds.min[2]<frame.min[2]-state.receiverDepth*shadowFrameSize(frame);
+      $('shadowBoundsHint').textContent=behind?'Some geometry is behind the screen. Fit screen depth to bring it back into the shadow.':'';
       const image=api.textures.get(state.target)?.image;
       if(image){
         const context=canvas.getContext('2d'),ratio=Math.min(canvas.width/image.width,canvas.height/image.height);
@@ -81,7 +84,7 @@ export function installSpecialist(api) {
   }
   function syncShadow(){
     const state=project().shadowLab;
-    for(const [id,key]of [['shadowX','x'],['shadowY','y'],['shadowDistance','distance'],['shadowOpacity','opacity']])$(id).value=state[key];
+    for(const [id,key]of [['shadowX','x'],['shadowY','y'],['shadowDistance','distance'],['shadowReceiverDepth','receiverDepth'],['shadowOpacity','opacity']])$(id).value=state[key];
     const select=$('shadowLights'),prior=select.value;
     select.replaceChildren(...state.lights.map((light,index)=>new Option(light.name,index)));
     if([...select.options].some(option=>option.value===prior))select.value=prior;
@@ -95,8 +98,15 @@ export function installSpecialist(api) {
   };
   $('closeShadow').onclick=()=>shadow.close();
   $('shadowRefresh').onclick=scheduleShadow;
+  $('fitShadowDepth').onclick=guard(()=>{
+    const bounds=api.geometry(false).bounds;
+    const frame=project().shadowLab.frame||initialFrame||bounds;
+    const needed=(frame.min[2]-bounds.min[2])/shadowFrameSize(frame)+.1;
+    api.commit(()=>Object.assign(project().shadowLab,{frame,receiverDepth:Math.min(5,Math.max(.15,needed))}));
+    shadowStatus(needed>5?'Screen is at maximum depth. Refit the frame to include the whole set.':'Screen depth fitted. Screen framing is preserved.');
+  },shadowStatus);
   $('fitShadow').onclick=guard(()=>{const bounds=api.geometry(false).bounds;api.commit(()=>project().shadowLab.frame=bounds);shadowStatus('Screen fitted and saved. Move objects without moving the frame.');},shadowStatus);
-  for(const [id,key]of [['shadowX','x'],['shadowY','y'],['shadowDistance','distance'],['shadowOpacity','opacity']])$(id).onchange=event=>{
+  for(const [id,key]of [['shadowX','x'],['shadowY','y'],['shadowDistance','distance'],['shadowReceiverDepth','receiverDepth'],['shadowOpacity','opacity']])$(id).onchange=event=>{
     const value=Number(event.target.value);
     api.commit(()=>project().shadowLab[key]=value);
   };
@@ -155,17 +165,34 @@ export function installSpecialist(api) {
     if(kitURL)URL.revokeObjectURL(kitURL);
     kitURL=URL.createObjectURL(new Blob([kit.svg],{type:svgType}));
     $('kitPreview').src=kitURL;
-    $('kitDepth').disabled=kit.type==='prism';
+    $('kitDepth').disabled=kit.type!=='box';
     labStatus('One A4 sheet. Print at actual size and score before gluing.');
   }
-  for(const id of ['kitType','kitWidth','kitHeight','kitDepth','kitArtwork'])$(id).onchange=guard(previewKit);
+  for(const id of ['kitWidth','kitHeight','kitDepth','kitArtwork'])$(id).onchange=guard(previewKit);
+  $('kitType').onchange=guard(()=>{
+    const type=$('kitType').value;
+    if(type==='hexagon')$('kitWidth').value=Math.min(25,+$('kitWidth').value);
+    if(type==='pyramid')$('kitHeight').value=Math.min(46,+$('kitHeight').value);
+    previewKit();
+  });
   $('kitDownload').onclick=guard(()=>saveSVG(makeKit().svg,'-paper-kit'));
   $('kitAssemble').onclick=guard(()=>{
     const kit=makeKit(),y=project().surfaceHeight||0;
-    const next=kit.type==='prism'?
-      api.object('svg',{name:'Paper prism mockup',svg:svgPath('M0 0 L'+kit.width+' 0 L'+kit.width/2+' '+(kit.width*Math.sqrt(3)/2)+' Z',kit.width,kit.width*Math.sqrt(3)/2),
-        width:kit.width,height:kit.width*Math.sqrt(3)/2,depth:kit.height,bevel:0,y}):
-      api.object('box',{name:'Paper box mockup',width:kit.width,height:kit.height,depth:kit.depth,y:y+kit.height/2});
+    let next;
+    if(kit.type==='pyramid'){
+      const half=kit.width/2, mid=kit.height/2;
+      next=api.object('mesh',{name:'Paper pyramid mockup',width:kit.width,height:kit.height,depth:kit.width,y:y+mid,
+        vertices:[-half,-mid,-half,half,-mid,-half,half,-mid,half,-half,-mid,half,0,mid,0],
+        triangles:[0,1,2,0,2,3,1,0,4,2,1,4,3,2,4,0,3,4]});
+    }else if(kit.type==='prism'||kit.type==='hexagon'){
+      const sides=kit.type==='prism'?3:6, width=kit.width*(sides===3?1:2), height=kit.width*Math.sqrt(3)*(sides===3?.5:1);
+      const points=sides===3?[[0,0],[width,0],[width/2,height]]:
+        Array.from({length:6},(_,i)=>[width/2+Math.cos(i*Math.PI/3)*width/2,height/2+Math.sin(i*Math.PI/3)*width/2]);
+      const path='M'+points.map(p=>p.join(' ')).join('L')+'Z';
+      next=api.object('svg',{name:sides===3?'Paper triangular prism mockup':'Paper hexagonal prism mockup',
+        svg:svgPath(path,width,height),width,height,depth:kit.height,bevel:0,y});
+    }else next=api.object('box',{name:'Paper box mockup',width:kit.width,height:kit.height,depth:kit.depth,y:y+kit.height/2});
+    next.paperKit={type:kit.type,width:kit.width,height:kit.height,depth:kit.depth};
     if(api.commit(()=>project().objects.push(next))){api.setSelection([next.id],next.id);api.frameSelection();main.close();}
   });
   function makeStack(){
@@ -248,7 +275,7 @@ export function installSpecialist(api) {
   function kitPreset(){
     const object=project().objects.find(object=>object.id===api.getSelection()[0]);
     const kit=object?.paperKit;
-    if(!kit||!['box','prism'].includes(kit.type))return false;
+    if(!kit||!['box','prism','hexagon','pyramid'].includes(kit.type))return false;
     $('kitType').value=kit.type;
     for(const [id,key]of [['kitWidth','width'],['kitHeight','height'],['kitDepth','depth']])if(Number.isFinite(kit[key]))$(id).value=kit[key];
     $('kitArtwork').checked=!!object.texture;

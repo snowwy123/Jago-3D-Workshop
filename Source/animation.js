@@ -50,12 +50,12 @@ pulseSheet.onclick=async()=>{
     if(!image)throw Error('Could not encode the sprite sheet.');
     const encode=text=>new TextEncoder().encode(text);
     const files={
-      'workshop-sprites.png':new Uint8Array(await image.arrayBuffer()),
+      ['workshop-sprites-'+columns+'x'+rows+'-'+frames+'f-'+fps+'fps.png']:new Uint8Array(await image.arrayBuffer()),
       'sprite-sheet.json':encode(JSON.stringify({columns,rows,frames,fps,width:w,height:h,alpha,sourceDuration:project.duration},null,2)),
-      'USE-IN-PULSE.txt':encode('Extract the ZIP. In Pulse import workshop-sprites.png, add it as an image part in Visual workshop, and open Animation · sprite sheet. Set Columns 6, Rows 4, Frame count 24, Frames per second 12. This retimes the Workshop clip to two seconds. Use another frame rate to change playback speed.')
+      'USE-IN-PULSE.txt':encode('Extract the ZIP. In Pulse import the PNG and add it as an image part in Visual workshop. Pulse reads the frame settings from the filename. This retimes the Workshop clip to two seconds. Use another frame rate to change playback speed.')
     };
     download(new Blob([zipSync(files,{level:0})],{type:'application/zip'}),filename()+'-pulse-sprites.zip');
-    $('outputStatus').textContent='Sprite sheet saved for Pulse. Import the PNG and use 6 × 4, 24 frames, 12 fps.';
+    $('outputStatus').textContent='Sprite sheet saved for Pulse. Import the PNG as artwork in Visual workshop.';
   }catch(error){$('outputStatus').textContent=error.message;}
   finally{
     if(output)disposeOutputRenderer(output);

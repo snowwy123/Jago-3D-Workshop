@@ -11,11 +11,31 @@ export function paperKit(type,width,height,depth,artwork=null) {
   const w=mm(width,15,80), h=mm(height,15,160), d=mm(depth,15,80), margin=14;
   const faces=[];
   const face=(name,points,tabs=[])=>faces.push({name,points,tabs});
-  if(type==='prism'){
-    const rise=w*Math.sqrt(3)/2, y=margin+rise;
-    for(let i=0;i<3;i++)face('Side '+(i+1),rect(margin+i*w,y,w,h),i===2?[1]:[]);
-    face('End A',[[margin+w,y],[margin,y],[margin+w/2,y-rise]],[1,2]);
-    face('End B',[[margin,y+h],[margin+w,y+h],[margin+w/2,y+h+rise]],[1,2]);
+  const prismSides=type==='hexagon'?6:type==='prism'?3:0;
+  if(prismSides){
+    const rise=w*Math.sqrt(3)*(prismSides===6?1:.5);
+    const x=margin+(prismSides===6?w/2:0), y=margin+rise;
+    for(let i=0;i<prismSides;i++)face('Side '+(i+1),rect(x+i*w,y,w,h),i===prismSides-1?[1]:[]);
+    function end(start,second,angle) {
+      const points=[start,second];
+      for(let i=1;i<prismSides-1;i++){
+        const a=angle+i*2*Math.PI/prismSides, prior=points.at(-1);
+        points.push([prior[0]+Math.cos(a)*w,prior[1]+Math.sin(a)*w]);
+      }
+      return points;
+    }
+    const tabs=Array.from({length:prismSides-1},(_,i)=>i+1);
+    face('End A',end([x+w,y],[x,y],Math.PI),tabs);
+    face('End B',end([x,y+h],[x+w,y+h],0),tabs);
+  } else if(type==='pyramid'){
+    const slope=Math.hypot(h,w/2), x=margin+slope, y=margin+slope;
+    const base=rect(x,y,w,w);
+    face('Base',base);
+    base.forEach((a,index)=>{
+      const b=base[(index+1)%4];
+      const tip=[(a[0]+b[0])/2+(b[1]-a[1])/w*slope,(a[1]+b[1])/2-(b[0]-a[0])/w*slope];
+      face('Face '+(index+1),[b,a,tip],[1]);
+    });
   } else {
     const x=margin+d,y=margin+d;
     face('Front',rect(x,y,w,h));
@@ -37,10 +57,19 @@ export function paperKit(type,width,height,depth,artwork=null) {
       else edges.set(key,{a,b,tab:tabs.includes(i)});
     });
   }
-  const joins=type==='prism'?
-    [['Side 3',1,'Side 1',3],['End A',1,'Side 3',0],['End A',2,'Side 2',0],['End B',1,'Side 2',2],['End B',2,'Side 3',2]]:
-    [['Back',1,'Left',3],['Top',0,'Back',0],['Top',1,'Right',0],['Top',3,'Left',0],
-      ['Bottom',2,'Back',2],['Bottom',1,'Right',2],['Bottom',3,'Left',2]];
+  const joins=[];
+  if(prismSides){
+    joins.push(['Side '+prismSides,1,'Side 1',3]);
+    for(let index=1;index<prismSides;index++){
+      joins.push(['End A',index,'Side '+(prismSides+1-index),0]);
+      joins.push(['End B',index,'Side '+(index+1),2]);
+    }
+  }else if(type==='pyramid'){
+    for(let index=1;index<=4;index++)joins.push(['Face '+index,1,'Face '+(index===1?4:index-1),2]);
+  }else{
+    joins.push(['Back',1,'Left',3],['Top',0,'Back',0],['Top',1,'Right',0],['Top',3,'Left',0],
+      ['Bottom',2,'Back',2],['Bottom',1,'Right',2],['Bottom',3,'Left',2]);
+  }
   const labelsByEdge=new Map();
   joins.forEach(([name,edge,receiving,other],index)=>{
     for(const [faceName,side] of [[name,edge],[receiving,other]]) {

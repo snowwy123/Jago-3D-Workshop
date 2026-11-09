@@ -31,6 +31,17 @@ export function construction(name, object) {
   const group = crypto.randomUUID();
   const part = (type, settings) => object(type,{group,groupName:name,...settings});
   switch (name) {
+    case 'Label bottle': return [
+      part('lathe',{name:'Bottle body · apply wrap here',width:63,height:142,depth:63,colour:'#94aba0',
+        profile:[[29,0],[31,3],[31,99],[28,111],[13,124],[12,140],[12,142]]}),
+      part('cylinder',{name:'Bottle cap',width:27,height:15,depth:27,y:141,colour:'#39505a',finish:'metal'})
+    ];
+    case 'Label can': return [
+      part('cylinder',{name:'Can body · apply wrap here',width:66,height:113,depth:66,y:1,colour:'#d4d7d2',finish:'metal'}),
+      part('cylinder',{name:'Can top',width:67,height:2,depth:67,y:113,colour:'#aebdc0',finish:'metal'}),
+      part('cylinder',{name:'Can bottom rim',width:67,height:2,depth:67,y:0,colour:'#aebdc0',finish:'metal'}),
+      part('torus',{name:'Pull tab',width:18,height:12,depth:1.5,y:115,rx:90,colour:'#7e9297',finish:'metal'})
+    ];
     case 'Ribbed shade': return [
       part('box',{name:'Shade rib',width:6,height:92,depth:12,colour:'#e9bd82',count:16,arrangement:'ring',spread:44,y:46}),
       part('torus',{name:'Top rim',width:110,height:110,depth:4,rx:90,y:94,colour:'#734e37'}),

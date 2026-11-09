@@ -7,17 +7,18 @@ export function normaliseShadow(value){
   value=value&&typeof value==='object'?value:{};
   const frame=value.frame;
   const validFrame=frame&&['min','max'].every(key=>Array.isArray(frame[key])&&frame[key].length===3&&frame[key].every(n=>Number.isFinite(n)&&Math.abs(n)<=20000))&&frame.max.every((n,i)=>n>=frame.min[i]);
-  return {...light(value),frame:validFrame?{min:frame.min,max:frame.max}:null,opacity:bounded(value.opacity,.5,0,1),
+  return {...light(value),frame:validFrame?{min:frame.min,max:frame.max}:null,receiverDepth:bounded(value.receiverDepth,.15,.05,5),opacity:bounded(value.opacity,.5,0,1),
     target:typeof value.target==='string'&&value.target.length<=2_000_000&&/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/.test(value.target)?value.target:null,
     lights:(Array.isArray(value.lights)?value.lights:[]).slice(0,8).filter(item=>item&&typeof item==='object')
       .map(item=>({...light(item),name:String(item.name||'Light').slice(0,60)}))};
 }
+export const shadowFrameSize=({min,max})=>Math.max(10,...max.map((value,index)=>value-min[index]));
 export function drawShadow(canvas,geometry,settings,transparent=false){
   const {min,max}=settings.frame||geometry.bounds;
-  const size=Math.max(10,...max.map((value,index)=>value-min[index]));
+  const size=shadowFrameSize({min,max});
   const centre=[(min[0]+max[0])/2,(min[1]+max[1])/2];
   const light=[centre[0]+settings.x*size,centre[1]+settings.y*size,max[2]+settings.distance*size];
-  const receiver=min[2]-size*.15;
+  const receiver=min[2]-size*(settings.receiverDepth??.15);
   const scale=Math.min(canvas.width,canvas.height)/(size*2.5);
   const context=canvas.getContext('2d');
   context.clearRect(0,0,canvas.width,canvas.height);

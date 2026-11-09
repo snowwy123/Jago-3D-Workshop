@@ -23,7 +23,7 @@ const {unzipSync,strFromU8}=require('fflate');
     await page.goto(pathToFileURL(path.resolve(__dirname,'../Jago-3D-Workshop.html')).href);
     await page.waitForFunction(()=>window.JagoWorkshop?.ready);
     assert.deepEqual(await page.locator('#examples option').evaluateAll(options=>options.map(option=>option.value)),
-      ['', 'shadow-relay','signal-pavilion','paper-delta','strata-relief','viewpoint-offset']);
+      ['', 'shadow-relay','signal-pavilion','paper-delta','strata-relief','viewpoint-offset','ocean-breakwater','prism-poster','afterimage-mapping','kinetic-orbit','moonlit-coast']);
     await click('openShadow');
     await page.waitForFunction(()=>document.querySelector('#shadowCanvas').getContext('2d').getImageData(320,240,1,1).data[3]===255);
     const mask=await download('shadowPNG');
@@ -82,7 +82,7 @@ const {unzipSync,strFromU8}=require('fflate');
     const sprites=unzipSync(await download('pulseSheet'));
     const metadata=JSON.parse(strFromU8(sprites['sprite-sheet.json']));
     assert.deepEqual([metadata.columns,metadata.rows,metadata.frames,metadata.fps],[6,4,24,12]);
-    const sprite=Buffer.from(sprites['workshop-sprites.png']);
+    const sprite=Buffer.from(sprites['workshop-sprites-6x4-24f-12fps.png']);
     assert.equal(sprite.readUInt32BE(16),metadata.width*6);
     assert.equal(sprite.readUInt32BE(20),metadata.height*4);
     assert.equal(sprite[25],6);
@@ -90,11 +90,11 @@ const {unzipSync,strFromU8}=require('fflate');
     await fs.mkdir(checks,{recursive:true});
     await fs.writeFile(path.join(checks,'alignment.png'),guide['alignment.png']);
     await fs.writeFile(path.join(checks,'shadow.png'),mask);
-    await fs.writeFile(path.join(checks,'workshop-sprites.png'),sprite);
+    await fs.writeFile(path.join(checks,'workshop-sprites-6x4-24f-12fps.png'),sprite);
     await page.keyboard.press('Escape');
     const names={
       'shadow-relay':'Shadow Relay','signal-pavilion':'Signal Pavilion','paper-delta':'Delta · paper prism',
-      'strata-relief':'Strata · layered sculpture','viewpoint-offset':'Offset · perspective lettering'
+      'strata-relief':'Strata · layered sculpture','viewpoint-offset':'Offset · perspective lettering', 'ocean-breakwater':'Breakwater · ocean stage', 'prism-poster':'Prism · crumpled holographic poster', 'afterimage-mapping':'Afterimage · projection mapping','kinetic-orbit':'Kinetic Orbit · animated sculpture','moonlit-coast':'Moonlit coast · night ocean'
     };
     for(const [key,name] of Object.entries(names)){
       await select('examples',key);
@@ -113,21 +113,33 @@ const {unzipSync,strFromU8}=require('fflate');
     assert.equal(await page.locator('#kitType').inputValue(),'prism');
     assert.match((await download('kitDownload')).toString(),/id="print-artwork"/);
     await click('closeSpecialist');
+    await click('draw');
+    const drawing=page.locator('#drawing'), drawingBox=await drawing.boundingBox();
+    const polygon=async points=>{for(const [x,y] of points)await drawing.click({position:{x:x*drawingBox.width,y:y*drawingBox.height}});};
+    await polygon([[.1,.2],[.55,.2],[.55,.75],[.1,.75]]);
+    await click('drawAdd');
+    await polygon([[.5,.3],[.8,.3],[.8,.7],[.5,.7]]);
+    await click('drawCut');
+    await polygon([[.72,.43],[.9,.43],[.9,.59],[.72,.59]]);
+    await click('drawFinish');
+    await page.waitForFunction(()=>JagoWorkshop.project.objects.some(o=>o.outlineContours?.length===3),null,{timeout:12000});
+    const outline=await page.evaluate(()=>JagoWorkshop.project.objects.find(o=>o.outlineContours?.length===3));
+    assert.match(outline.svg,/fill-rule="evenodd"/);
     assert.deepEqual(errors,[]);
     console.log('PASS shadow PNG, A4 nets, closed-solid slices and registration, assembled stack, perspective guide, alpha sprite sheet');
     if(process.env.WORKSHOP_PULSE_HTML) {
       const pulse=await browser.newPage({viewport:{width:1440,height:900}});
       await pulse.goto(pathToFileURL(process.env.WORKSHOP_PULSE_HTML).href);
       await pulse.waitForFunction(()=>window.PulseDesign);
-      await pulse.locator('#files').setInputFiles({name:'workshop-sprites.png',mimeType:'image/png',buffer:sprite});
-      await pulse.waitForFunction(()=>project.assets.some(asset=>asset.name==='workshop-sprites.png'));
-      await pulse.waitForFunction(()=>images.has(project.assets.find(asset=>asset.name==='workshop-sprites.png').id));
+      await pulse.locator('#files').setInputFiles({name:'workshop-sprites-6x4-24f-12fps.png',mimeType:'image/png',buffer:sprite});
+      await pulse.waitForFunction(()=>project.assets.some(asset=>asset.name==='workshop-sprites-6x4-24f-12fps.png'));
+      await pulse.waitForFunction(()=>images.has(project.assets.find(asset=>asset.name==='workshop-sprites-6x4-24f-12fps.png').id));
       assert.equal(await pulse.evaluate(()=>{
-        const asset=project.assets.find(asset=>asset.name==='workshop-sprites.png');
+        const asset=project.assets.find(asset=>asset.name==='workshop-sprites-6x4-24f-12fps.png');
         const canvas=document.createElement('canvas');
         const scene={...project.scenes[0],duration:2,layers:[],experimental:PulseExperimental.normalise({
           engine:'design',design:{parts:[{type:'image',asset:asset.id,x:.5,y:.5,width:1,height:1,
-            sheetCols:6,sheetRows:4,frames:24,fps:12}]}
+            ...workshopSpriteSettings(asset.name)}]}
         })};
         const q={...project,width:320,height:240,duration:2,transparent:true,loop:false,scenes:[scene]};
         Pulse.render(canvas,q,0,images);const first=canvas.toDataURL();
